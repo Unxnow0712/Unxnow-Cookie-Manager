@@ -1,7 +1,7 @@
 # UNXNOW Cookie Manager
 
 <div align="center">
-  <img src="Unxnow/icons/logo.png" width="96" height="96" alt="UNXNOW Cookie Manager Logo" style="border-radius: 20px;" />
+  <img src="icons/logo.png" width="96" height="96" alt="UNXNOW Cookie Manager Logo" style="border-radius: 20px;" />
   <h3>Modern, Lightweight & Secure Cookie Manager for Chromium Browsers</h3>
 
   [![Manifest V3](https://img.shields.io/badge/Manifest-V3-blue?style=flat-square)](#)
