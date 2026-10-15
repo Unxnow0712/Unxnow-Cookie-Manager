@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Unxnow Cookie Editor</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-top-row">
+        <div class="brand-group">
+          <div class="brand">
+            <div class="brand-logo-badge">
+              <img src="icons/logo.png" class="brand-logo-img" alt="UNXNOW Logo" />
+            </div>
+            <div class="brand-info">
+              <div class="brand-title-wrap">
+                <span class="brand-name">UNXNOW</span>
+                <span class="brand-badge">Dev</span>
+              </div>
+              <span class="brand-tagline">Cookie Manager</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Navigation Tabs & Settings: Top-Right -->
+        <div class="header-right-actions">
+          <button id="nav-btn-profiles" class="header-icon-btn nav-tab active" title="Website Tersimpan" data-i18n-title="nav.profiles.title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+            </svg>
+            <span id="profile-counter" class="hidden">0</span>
+          </button>
+          <button id="nav-btn-cookies" class="header-icon-btn nav-tab" title="Cookie Tab Aktif" data-i18n-title="nav.cookies.title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5" />
+              <path d="M8.5 8.5v.01" />
+              <path d="M7 14v.01" />
+              <path d="M11 17v.01" />
+              <path d="M15 13v.01" />
+            </svg>
+          </button>
+          <button id="btn-settings-toggle" class="header-icon-btn" title="Pengaturan dan Alat" data-i18n-title="nav.menu.title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3" />
+              <path
+                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Floating Settings Dropdown -->
+      <div id="settings-dropdown" class="settings-dropdown hidden">
+        <div class="settings-menu">
+          <button id="menu-btn-save-current" class="settings-menu-item" type="button"
+            title="Simpan cookie dari tab aktif" data-i18n-title="menu.save.title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+              <polyline points="17 21 17 13 7 13 7 21" />
+              <polyline points="7 3 7 8 15 8" />
+            </svg>
+            <span id="label-menu-save" data-i18n="menu.save">Simpan Tab</span>
+          </button>
+          <button id="menu-btn-new-profile" class="settings-menu-item" type="button"
+            title="Tambah profil kustom secara manual" data-i18n-title="menu.add.title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            <span id="label-menu-add" data-i18n="menu.add">Tambah Profil</span>
+          </button>
+          <div class="settings-menu-divider"></div>
+          <button id="menu-btn-export" class="settings-menu-item" type="button" title="Ekspor semua profil ke JSON" data-i18n-title="menu.backup.title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="17 8 12 3 7 8" />
+              <line x1="12" y1="3" x2="12" y2="15" />
+            </svg>
+            <span id="label-menu-export" data-i18n="menu.backup">Cadangkan</span>
+          </button>
+          <button id="menu-btn-import" class="settings-menu-item" type="button" title="Pulihkan profil dari JSON" data-i18n-title="menu.restore.title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            <span id="label-menu-import" data-i18n="menu.restore">Pulihkan</span>
+          </button>
+          <div class="settings-menu-divider"></div>
+          <button id="menu-btn-theme" class="settings-menu-item" type="button" title="Ganti mode Gelap / Terang" data-i18n-title="menu.theme.title">
+            <svg id="theme-icon-sun" class="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="5" />
+              <line x1="12" y1="1" x2="12" y2="3" />
+              <line x1="12" y1="21" x2="12" y2="23" />
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+              <line x1="1" y1="12" x2="3" y2="12" />
+              <line x1="21" y1="12" x2="23" y2="12" />
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg id="theme-icon-moon" class="theme-icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+            <span id="label-menu-theme">Mode Gelap</span>
+          </button>
+          <button id="menu-btn-language" class="settings-menu-item" type="button" title="Ganti Bahasa (Indonesia / English)" data-i18n-title="menu.lang.title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m5 8 6 6" />
+              <path d="m4 14 6-6 2-3" />
+              <path d="M2 5h12" />
+              <path d="M7 2h1" />
+              <path d="m22 22-5-10-5 10" />
+              <path d="M14 18h6" />
+            </svg>
+            <span id="label-menu-lang" data-i18n="menu.lang">Bahasa: Indonesia</span>
+          </button>
+          <button id="menu-btn-categories" class="settings-menu-item" type="button" title="Kelola Kategori Website" data-i18n-title="menu.categories.title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18" />
+            </svg>
+            <span id="label-menu-categories" data-i18n="menu.categories">Kelola Kategori</span>
+          </button>
+          <div class="settings-menu-divider"></div>
+          <button id="menu-btn-about" class="settings-menu-item" type="button" title="Tentang Ekstensi" data-i18n-title="menu.about.title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="12" x2="12" y2="16" />
+              <circle cx="12" cy="8" r="1" fill="currentColor" stroke="none" />
+            </svg>
+            <span id="label-menu-about" data-i18n="menu.about">Tentang UNXNOW</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+
+
+    <!-- Main Content Area -->
+    <main class="app-main">
+      <!-- Search Bar Row with Sort Toggle -->
+      <div class="search-bar-row">
+        <div class="search-box">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <input type="text" id="search-input" placeholder="Cari website atau profil cookie..." autocomplete="off" data-i18n-placeholder="search.placeholder.profiles" />
+          <button id="search-clear" class="btn-clear hidden" title="Hapus pencarian" data-i18n-title="search.clear.title">&times;</button>
+        </div>
+        <button id="btn-sort-toggle" class="btn-sort" title="Urutkan Daftar" data-i18n-title="sort.toggle.title" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 6h18M6 12h12M9 18h6" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Floating Sort Dropdown Menu -->
+      <div id="sort-dropdown" class="sort-dropdown hidden">
+        <div id="sort-menu-header-title" class="sort-menu-header" data-i18n="sort.header.title">Urutkan Berdasarkan</div>
+        <div id="sort-options-list" class="sort-options-list"></div>
+      </div>
+      
+      <!-- PANE 1: LIVE TAB COOKIES -->
+      <div id="pane-cookies" class="tab-pane hidden">
+        <!-- Live Tab Context Bar (Domain & Cookie Counter) -->
+        <div id="site-info" class="site-info">
+          <div class="site-info-left">
+            <span class="status-dot-pulse" title="Terhubung ke tab aktif" data-i18n-title="siteinfo.connected.title"></span>
+            <svg class="site-globe-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="2" y1="12" x2="22" y2="12" />
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+            </svg>
+            <span id="domain-badge" class="domain-badge" title="Domain Tab Aktif" data-i18n-title="siteinfo.domain.title">Detecting...</span>
+          </div>
+          <div class="site-info-right">
+            <span id="cookie-counter" class="counter-badge" title="Cookie tab aktif" data-i18n-title="siteinfo.cookies.title">0 cookie</span>
+          </div>
+        </div>
+
+        <!-- Unsupported protocol view -->
+        <div id="view-unsupported" class="state-view hidden">
+          <div class="state-icon-badge warning">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+          </div>
+          <h3 data-i18n="empty.restricted.title">Halaman Terbatas</h3>
+          <p data-i18n="empty.restricted.desc">Ekstensi tidak dapat mengakses cookie pada halaman sistem browser (seperti chrome://, edge://, ekstensi web, atau file lokal).</p>
+        </div>
+
+        <!-- Empty state view -->
+        <div id="view-empty" class="state-view hidden">
+          <div class="state-icon-badge cookie-empty">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5" />
+              <circle cx="8.5" cy="8.5" r="1" fill="currentColor" />
+              <circle cx="7" cy="14" r="1" fill="currentColor" />
+              <circle cx="11" cy="17" r="1" fill="currentColor" />
+              <circle cx="15" cy="13" r="1" fill="currentColor" />
+            </svg>
+          </div>
+          <h3 data-i18n="empty.cookies.title">Tidak Ada Cookie Ditemukan</h3>
+          <p data-i18n="empty.cookies.desc">Halaman ini tidak memiliki cookie atau filter pencarian tidak menemukan hasil.</p>
+          <button id="btn-empty-add" class="btn btn-primary btn-sm" data-i18n="empty.cookies.btn">Tambah Cookie Pertama</button>
+        </div>
+
+        <!-- Cookie list -->
+        <ul id="cookie-list" class="cookie-list"></ul>
+      </div>
+
+      <!-- PANE 2: SAVED PROFILES -->
+      <div id="pane-profiles" class="tab-pane">
+        <!-- VIEW 2A: WEBSITES DIRECTORY (Level 1) -->
+        <div id="profiles-websites-view" class="profiles-subview">
+          <!-- Website Category Filter Bar -->
+          <div id="website-category-bar" class="category-bar"></div>
+
+          <!-- Empty Websites state -->
+          <div id="view-websites-empty" class="state-view hidden">
+            <div class="state-icon-badge info">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="2" y1="12" x2="22" y2="12" />
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+              </svg>
+            </div>
+            <h3 data-i18n="empty.websites.title">Belum Ada Website Tersimpan</h3>
+            <p data-i18n="empty.websites.desc">Simpan cookie dari tab yang sedang dibuka atau tambahkan profil baru secara manual.</p>
+            <div class="empty-btn-group">
+              <button id="btn-empty-save-site" class="btn btn-primary btn-sm" data-i18n="empty.websites.btn_current">Simpan Tab Saat Ini</button>
+              <button id="btn-empty-create-site" class="btn btn-secondary btn-sm" data-i18n="empty.websites.btn_custom">+ Tambah Website</button>
+            </div>
+          </div>
+
+          <!-- Websites list -->
+          <ul id="websites-list" class="websites-list"></ul>
+        </div>
+
+        <!-- VIEW 2B: WEBSITE COOKIE PROFILES (Level 2 Drill-down) -->
+        <div id="profiles-detail-view" class="profiles-subview hidden">
+          <div class="profiles-bar profiles-bar-detail">
+            <button id="btn-back-to-websites" class="btn-back" title="Kembali ke semua website" data-i18n-title="detail.back.title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12" />
+                <polyline points="12 19 5 12 12 5" />
+              </svg>
+              <span data-i18n="detail.back.text">Semua Website</span>
+            </button>
+            <button id="btn-add-profile-for-site" class="btn btn-primary btn-xs"
+              title="Tambah profil cookie untuk website ini" data-i18n-title="detail.add.title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+              <span data-i18n="detail.add.text">Tambah</span>
+            </button>
+          </div>
+
+          <!-- Empty Profiles for this website -->
+          <div id="view-site-profiles-empty" class="state-view hidden">
+            <div class="state-icon-badge info">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+              </svg>
+            </div>
+            <h3 data-i18n="empty.profiles.title">Belum Ada Profil untuk Website Ini</h3>
+            <p data-i18n="empty.profiles.desc">Belum ada profil cookie untuk website ini.</p>
+            <button id="btn-site-add-first-profile" class="btn btn-primary btn-sm" data-i18n="empty.profiles.btn">Tambah Profil Pertama</button>
+          </div>
+
+          <!-- Profiles list for the selected website -->
+          <ul id="site-profiles-list" class="profile-list"></ul>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer id="app-footer-bar" class="app-status-bar">
+      <span class="footer-credit" data-i18n-html="footer.credit">Developed by <strong>@Unxnow0712</strong></span>
+    </footer>
+
+    <!-- Footer Action Toolbar: Live Cookies -->
+    <footer id="footer-cookies" class="app-footer hidden">
+      <button id="btn-open-add" class="toolbar-btn primary" title="Tambah cookie baru" data-i18n-title="footer.add.title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="5" x2="12" y2="19" />
+          <line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+        <span data-i18n="footer.add">Tambah</span>
+      </button>
+
+      <button id="btn-open-import" class="toolbar-btn" title="Impor cookie" data-i18n-title="footer.import.title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+          <polyline points="7 10 12 15 17 10" />
+          <line x1="12" y1="15" x2="12" y2="3" />
+        </svg>
+        <span data-i18n="footer.import">Impor</span>
+      </button>
+
+      <button id="btn-open-export" class="toolbar-btn" title="Ekspor cookie" data-i18n-title="footer.export.title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+          <polyline points="17 8 12 3 7 8" />
+          <line x1="12" y1="3" x2="12" y2="15" />
+        </svg>
+        <span data-i18n="footer.export">Ekspor</span>
+      </button>
+
+      <button id="btn-open-delete-all" class="toolbar-btn danger" title="Hapus semua cookie" data-i18n-title="footer.delete_all.title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="3 6 5 6 21 6" />
+          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+        </svg>
+        <span data-i18n="footer.delete_all">Hapus Semua</span>
+      </button>
+    </footer>
+
+    <input type="file" id="input-restore-profiles" accept=".json" class="hidden" />
+
+    <!-- MODAL: ADD COOKIE -->
+    <div id="modal-add" class="modal-overlay hidden">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3 data-i18n="modal.add.title">Tambah Cookie Baru</h3>
+          <button class="modal-close" data-close="modal-add">&times;</button>
+        </div>
+        <form id="form-add" class="modal-body form-grid">
+          <div class="field-group full">
+            <label for="add-name"><span data-i18n="modal.add.name">Nama Cookie</span> <span class="req">*</span></label>
+            <input type="text" id="add-name" required placeholder="contoh: session_token" data-i18n-placeholder="modal.add.name.ph" />
+          </div>
+
+          <div class="field-group full">
+            <label for="add-value" data-i18n="modal.add.value">Nilai Cookie</label>
+            <textarea id="add-value" rows="3" placeholder="Masukkan nilai cookie..." data-i18n-placeholder="modal.add.value.ph"></textarea>
+          </div>
+
+          <div class="field-group half">
+            <label for="add-domain" data-i18n="modal.add.domain">Domain</label>
+            <input type="text" id="add-domain" placeholder="contoh: .example.com" data-i18n-placeholder="modal.add.domain.ph" />
+          </div>
+
+          <div class="field-group half">
+            <label for="add-path" data-i18n="modal.add.path">Path</label>
+            <input type="text" id="add-path" value="/" placeholder="/" />
+          </div>
+
+          <div class="field-group half">
+            <label for="add-samesite" data-i18n="modal.add.samesite">SameSite</label>
+            <select id="add-samesite">
+              <option value="lax">Lax</option>
+              <option value="strict">Strict</option>
+              <option value="no_restriction" data-i18n="cookie.field.samesite.none">None (Tanpa batasan)</option>
+            </select>
+          </div>
+
+          <div class="field-group half">
+            <label for="add-expiration" data-i18n="modal.add.expiration">Kedaluwarsa (Unix / Detik)</label>
+            <input type="datetime-local" id="add-expiration" />
+          </div>
+
+          <div class="checkboxes-row full">
+            <label class="custom-checkbox">
+              <input type="checkbox" id="add-session" checked />
+              <span data-i18n="modal.add.session">Cookie Sesi</span>
+            </label>
+            <label class="custom-checkbox">
+              <input type="checkbox" id="add-hostonly" />
+              <span data-i18n="modal.add.hostonly">Host Only</span>
+            </label>
+            <label class="custom-checkbox">
+              <input type="checkbox" id="add-secure" />
+              <span data-i18n="modal.add.secure">Aman (Secure)</span>
+            </label>
+            <label class="custom-checkbox">
+              <input type="checkbox" id="add-httponly" />
+              <span data-i18n="modal.add.httponly">HttpOnly</span>
+            </label>
+          </div>
+
+          <div class="modal-footer full">
+            <button type="button" class="btn btn-secondary" data-close="modal-add" data-i18n="modal.add.btn_cancel">Batal</button>
+            <button type="submit" class="btn btn-primary" data-i18n="modal.add.btn_create">Buat Cookie</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- MODAL: IMPORT COOKIES -->
+    <div id="modal-import" class="modal-overlay hidden">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3 data-i18n="modal.import.title">Impor Cookie</h3>
+          <button class="modal-close" data-close="modal-import">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p class="hint" data-i18n="modal.import.desc">Tempel cookie dalam format JSON, Header String (name=val;...), atau Netscape. Format terdeteksi otomatis.</p>
+          <textarea id="import-input" rows="8" placeholder="Tempel konten cookie di sini..." data-i18n-placeholder="modal.import.ph"></textarea>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-close="modal-import" data-i18n="modal.import.btn_cancel">Batal</button>
+            <button type="button" id="btn-submit-import" class="btn btn-primary" data-i18n="modal.import.btn_submit">Impor Sekarang</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: EXPORT COOKIES -->
+    <div id="modal-export" class="modal-overlay hidden">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3 data-i18n="modal.export.title">Ekspor Cookie</h3>
+          <button class="modal-close" data-close="modal-export">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="export-tabs">
+            <button class="export-tab active" data-format="json">JSON</button>
+            <button class="export-tab" data-format="header">Header String</button>
+            <button class="export-tab" data-format="netscape">Netscape</button>
+          </div>
+          <textarea id="export-output" rows="9" readonly></textarea>
+          <div class="modal-footer">
+            <button type="button" id="btn-download-export" class="btn btn-secondary" data-i18n="modal.export.btn_download">Unduh File</button>
+            <button type="button" id="btn-copy-export" class="btn btn-primary" data-i18n="modal.export.btn_copy">Salin ke Clipboard</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: CONFIRM DELETE ALL COOKIES -->
+    <div id="modal-delete-all" class="modal-overlay hidden">
+      <div class="modal-card modal-confirm">
+        <div class="confirm-dialog-content">
+          <div class="confirm-icon-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              <line x1="10" y1="11" x2="10" y2="17"></line>
+              <line x1="14" y1="11" x2="14" y2="17"></line>
+            </svg>
+          </div>
+          <h3 class="confirm-title" data-i18n="modal.delete_all.title">Hapus Semua Cookie?</h3>
+          <p class="confirm-message" id="delete-all-desc">Yakin ingin menghapus semua cookie untuk <span class="confirm-target-badge" id="delete-domain-name">website ini</span>?</p>
+          <div class="confirm-warning-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            <span data-i18n="modal.delete_all.warn">Anda akan keluar dari sesi aktif di website ini.</span>
+          </div>
+        </div>
+        <div class="confirm-footer-actions">
+          <button type="button" class="btn btn-secondary btn-confirm-cancel" data-close="modal-delete-all" data-i18n="modal.delete_all.btn_cancel">Batal</button>
+          <button type="button" id="btn-confirm-delete-all" class="btn-destructive-solid btn-confirm-action">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            </svg>
+            <span data-i18n="modal.delete_all.btn_confirm">Ya, Hapus Semua</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: SAVE / CREATE PROFILE -->
+    <div id="modal-save-profile" class="modal-overlay hidden">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3 id="modal-save-profile-title" data-i18n="modal.save_profile.title">Simpan Profil Cookie</h3>
+          <button class="modal-close" data-close="modal-save-profile">&times;</button>
+        </div>
+        <form id="form-save-profile" class="modal-body form-grid">
+          <input type="hidden" id="profile-edit-id" value="" />
+
+          <div class="field-group full">
+            <label for="profile-name-input"><span data-i18n="modal.save_profile.name">Nama Profil</span> <span class="req">*</span></label>
+            <input type="text" id="profile-name-input" required placeholder="contoh: Netflix - Akun Pribadi" data-i18n-placeholder="modal.save_profile.name.ph" />
+          </div>
+
+          <div class="field-group full">
+            <label for="profile-domain-input"><span data-i18n="modal.save_profile.domain">Domain Website Target</span> <span class="req">*</span></label>
+            <input type="text" id="profile-domain-input" required placeholder="contoh: netflix.com" data-i18n-placeholder="modal.save_profile.domain.ph" />
+          </div>
+
+          <div class="field-group full">
+            <label data-i18n="modal.save_profile.source">Sumber Cookie</label>
+            <div class="source-radio-group">
+              <label class="custom-radio">
+                <input type="radio" name="profile-source" id="source-current-tab" value="current" checked />
+                <span id="label-source-current">Cookie Tab Aktif (<strong id="source-current-count">0</strong> item)</span>
+              </label>
+              <label class="custom-radio">
+                <input type="radio" name="profile-source" id="source-custom-paste" value="custom" />
+                <span data-i18n="modal.save_profile.source_custom">Custom / Tempel Cookie</span>
+              </label>
+            </div>
+          </div>
+
+          <div id="profile-custom-box" class="field-group full hidden">
+            <label for="profile-custom-cookies" data-i18n="modal.save_profile.paste_label">Tempel Cookie (Format JSON, Header, atau Netscape)</label>
+            <textarea id="profile-custom-cookies" rows="5" placeholder="Tempel data cookie di sini..." data-i18n-placeholder="modal.save_profile.paste_ph"></textarea>
+          </div>
+
+          <div class="modal-footer full">
+            <button type="button" class="btn btn-secondary" data-close="modal-save-profile" data-i18n="modal.save_profile.btn_cancel">Batal</button>
+            <button type="submit" class="btn btn-primary" id="btn-submit-save-profile" data-i18n="modal.save_profile.btn_save">Simpan Profil</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- MODAL: VIEW / INSPECT PROFILE -->
+    <div id="modal-view-profile" class="modal-overlay hidden">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="profile-modal-title-wrap">
+            <h3 id="view-profile-title">Profile Name</h3>
+            <span id="view-profile-domain" class="badge-domain">domain.com</span>
+          </div>
+          <button class="modal-close" data-close="modal-view-profile">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="profile-details-bar">
+            <span id="view-profile-count" class="counter-badge">0 cookies</span>
+            <span id="view-profile-date" class="profile-meta-date">Saved on ...</span>
+          </div>
+          <div class="export-tabs">
+            <button class="view-profile-tab active" data-format="json">JSON</button>
+            <button class="view-profile-tab" data-format="header">Header String</button>
+            <button class="view-profile-tab" data-format="netscape">Netscape</button>
+          </div>
+          <textarea id="view-profile-content" rows="8" readonly></textarea>
+          <div class="modal-footer">
+            <button type="button" id="btn-copy-view-profile" class="btn btn-secondary" data-i18n="modal.view_profile.btn_copy">Salin</button>
+            <button type="button" id="btn-apply-from-modal" class="btn btn-primary" data-i18n="modal.view_profile.btn_apply">Terapkan ke Tab Ini</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: EDIT WEBSITE NAME -->
+    <div id="modal-edit-website" class="modal-overlay hidden">
+      <div class="modal-card modal-sm modal-edit-website">
+        <div class="modal-header">
+          <h3 data-i18n="modal.edit_website.title">Edit Nama Website</h3>
+          <button class="modal-close" data-close="modal-edit-website">&times;</button>
+        </div>
+        <form id="form-edit-website" class="modal-body">
+          <input type="hidden" id="edit-website-domain" />
+          <div class="field-group full">
+            <label for="edit-website-name" data-i18n="modal.edit_website.label">Nama Tampilan Website</label>
+            <input type="text" id="edit-website-name" placeholder="contoh: Netflix Utama, Work ChatGPT..." data-i18n-placeholder="modal.edit_website.ph" required />
+            <p id="edit-website-domain-hint" class="hint">Domain asli: netflix.com</p>
+          </div>
+          <div class="field-group full">
+            <label for="category-select-trigger" data-i18n="modal.edit_website.category_label">Kategori Website</label>
+            <div class="custom-category-select" id="custom-category-select">
+              <button type="button" class="category-select-trigger" id="category-select-trigger" aria-haspopup="listbox" aria-expanded="false">
+                <span class="category-select-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18" />
+                  </svg>
+                </span>
+                <span class="category-select-label" id="category-select-current-label" data-i18n="modal.edit_website.category_none">Tanpa Kategori</span>
+                <span class="category-select-arrow">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </span>
+              </button>
+
+              <div class="category-options-dropdown hidden" id="category-options-dropdown" role="listbox"></div>
+              <input type="hidden" id="edit-website-category" value="" />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="btn-delete-website-modal" class="btn-destructive-subtle"
+              title="Hapus website ini dan semua profilnya" data-i18n-title="modal.edit_website.btn_delete.title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                <line x1="10" y1="11" x2="10" y2="17"></line>
+                <line x1="14" y1="11" x2="14" y2="17"></line>
+              </svg>
+              <span data-i18n="modal.edit_website.btn_delete">Hapus Website</span>
+            </button>
+            <div style="flex: 1;"></div>
+            <button type="button" class="btn btn-secondary btn-sm" data-close="modal-edit-website" data-i18n="modal.edit_website.btn_cancel">Batal</button>
+            <button type="button" id="btn-reset-website-name" class="btn btn-secondary btn-sm"
+              title="Kembalikan ke nama domain asli" data-i18n-title="modal.edit_website.btn_reset.title" data-i18n="modal.edit_website.btn_reset">Reset</button>
+            <button type="submit" class="btn btn-primary btn-sm" data-i18n="modal.edit_website.btn_save">Simpan</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- MODAL: CONFIRM DELETE WEBSITE -->
+    <div id="modal-delete-website" class="modal-overlay hidden">
+      <div class="modal-card modal-confirm">
+        <div class="confirm-dialog-content">
+          <div class="confirm-icon-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              <line x1="10" y1="11" x2="10" y2="17"></line>
+              <line x1="14" y1="11" x2="14" y2="17"></line>
+            </svg>
+          </div>
+          <h3 class="confirm-title" data-i18n="modal.delete_website.title">Hapus Website</h3>
+          <p class="confirm-message" id="delete-website-confirm-text">Yakin ingin menghapus website <span class="confirm-target-badge" id="delete-website-name-target">Netflix</span> dari daftar?</p>
+          <div class="confirm-warning-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            <span id="delete-website-count-hint" data-i18n="modal.delete_website.warn">Semua profil cookie di website ini akan ikut terhapus permanen.</span>
+          </div>
+        </div>
+        <div class="confirm-footer-actions">
+          <button type="button" class="btn btn-secondary btn-confirm-cancel" data-close="modal-delete-website" data-i18n="modal.delete_website.btn_cancel">Batal</button>
+          <button type="button" id="btn-confirm-delete-website" class="btn-destructive-solid btn-confirm-action">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            </svg>
+            <span data-i18n="modal.delete_website.btn_confirm">Ya, Hapus Website</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: CONFIRM DELETE PROFILE -->
+    <div id="modal-delete-profile" class="modal-overlay hidden">
+      <div class="modal-card modal-confirm">
+        <div class="confirm-dialog-content">
+          <div class="confirm-icon-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              <line x1="10" y1="11" x2="10" y2="17"></line>
+              <line x1="14" y1="11" x2="14" y2="17"></line>
+            </svg>
+          </div>
+          <h3 class="confirm-title" data-i18n="modal.delete_profile.title">Hapus Profil Cookie</h3>
+          <p class="confirm-message" id="delete-profile-confirm-text">Yakin ingin menghapus profil <span class="confirm-target-badge" id="delete-profile-name-target">Profil</span>?</p>
+          <div class="confirm-warning-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            <span data-i18n="modal.delete_profile.warn">Profil cookie ini akan dihapus secara permanen dari daftar.</span>
+          </div>
+        </div>
+        <div class="confirm-footer-actions">
+          <button type="button" class="btn btn-secondary btn-confirm-cancel" data-close="modal-delete-profile" data-i18n="modal.delete_profile.btn_cancel">Batal</button>
+          <button type="button" id="btn-confirm-delete-profile" class="btn-destructive-solid btn-confirm-action">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            </svg>
+            <span data-i18n="modal.delete_profile.btn_confirm">Ya, Hapus Profil</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+        <!-- MODAL: PROFILE NOTE -->
+    <div id="modal-profile-note" class="modal-overlay hidden">
+      <div class="modal-card modal-sm">
+        <div class="modal-header">
+          <div class="profile-modal-title-wrap">
+            <h3 data-i18n="modal.note.title">Catatan Profil</h3>
+            <span id="note-profile-domain-badge" class="badge-domain">domain.com</span>
+          </div>
+          <button class="modal-close" data-close="modal-profile-note">&times;</button>
+        </div>
+        <form id="form-profile-note" class="modal-body">
+          <input type="hidden" id="note-profile-id" />
+          <div class="field-group full">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+              <span id="note-profile-name-label" style="font-size:12px; font-weight:600; color:var(--text-main);">Profil</span>
+            </div>
+            <textarea id="note-profile-content" rows="6" placeholder="Tulis catatan untuk profil ini... (contoh: akun kedaluwarsa, email login, instruksi, atau tags)" data-i18n-placeholder="modal.note.placeholder" style="font-size:11.5px; line-height:1.5; resize:vertical;"></textarea>
+            <p class="hint" data-i18n="modal.note.hint">Catatan hanya tersimpan lokal di browser Anda untuk profil ini.</p>
+          </div>
+          <div class="modal-footer note-modal-footer">
+            <button type="button" id="btn-clear-profile-note" class="btn-destructive-subtle" title="Hapus Catatan" data-i18n-title="modal.note.btn_clear_title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              </svg>
+              <span data-i18n="modal.note.btn_clear">Hapus</span>
+            </button>
+            <div class="note-footer-right">
+              <button type="button" class="btn btn-secondary btn-sm" data-close="modal-profile-note" data-i18n="modal.note.btn_cancel">Batal</button>
+              <button type="submit" class="btn btn-primary btn-sm" id="btn-save-profile-note" data-i18n="modal.note.btn_save">Simpan Catatan</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- MODAL: EDIT COOKIE PROFILE -->
+    <div id="modal-edit-profile" class="modal-overlay hidden">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="profile-modal-title-wrap">
+            <h3 data-i18n="modal.edit_profile.title">Edit Profil Cookie</h3>
+            <span id="edit-profile-domain-badge" class="badge-domain">domain.com</span>
+          </div>
+          <button class="modal-close" data-close="modal-edit-profile">&times;</button>
+        </div>
+        <form id="form-edit-profile" class="modal-body form-grid">
+          <input type="hidden" id="edit-profile-id" />
+          <input type="hidden" id="edit-profile-domain" />
+
+          <div class="field-group full">
+            <label for="edit-profile-title"><span data-i18n="modal.edit_profile.name">Nama Profil</span> <span class="req">*</span></label>
+            <input type="text" id="edit-profile-title" placeholder="contoh: Akun Utama, VIP, Akun 2..." data-i18n-placeholder="modal.edit_profile.name.ph" required />
+          </div>
+
+          <div class="field-group full">
+            <label for="edit-profile-note"><span data-i18n="modal.edit_profile.note">Catatan Profil (Opsional)</span></label>
+            <input type="text" id="edit-profile-note" placeholder="contoh: Akun pribadi, expired 2026..." data-i18n-placeholder="modal.edit_profile.note.ph" />
+          </div>
+
+          <div class="field-group full">
+            <div class="label-with-count" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+              <label for="edit-profile-cookies"><span data-i18n="modal.edit_profile.cookies">Data Cookie (JSON)</span> <span class="req">*</span></label>
+              <span id="edit-profile-cookies-count" class="counter-badge">0 cookies</span>
+            </div>
+            <textarea id="edit-profile-cookies" rows="9" placeholder="Tempel array cookie dalam format JSON..." data-i18n-placeholder="modal.edit_profile.cookies.ph" required style="font-family:monospace; font-size:11.5px;"></textarea>
+            <p class="hint" data-i18n="modal.edit_profile.desc">Anda dapat mengubah nilai, menambah, atau menghapus cookie dalam format JSON.</p>
+          </div>
+
+          <div class="modal-footer full" style="display:flex; justify-content:space-between; align-items:center;">
+            <button type="button" id="btn-delete-profile-from-edit-modal" class="btn-destructive-subtle"
+              title="Hapus profil ini" data-i18n-title="modal.edit_profile.btn_delete.title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                <line x1="10" y1="11" x2="10" y2="17"></line>
+                <line x1="14" y1="11" x2="14" y2="17"></line>
+              </svg>
+              <span data-i18n="modal.edit_profile.btn_delete">Hapus Profil</span>
+            </button>
+            <div style="display:flex; gap:6px;">
+              <button type="button" class="btn btn-secondary btn-sm" data-close="modal-edit-profile" data-i18n="modal.edit_profile.btn_cancel">Batal</button>
+              <button type="submit" class="btn btn-primary btn-sm" id="btn-save-edit-profile" data-i18n="modal.edit_profile.btn_save">Simpan Perubahan</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- MODAL: MANAGE CATEGORIES -->
+    <div id="modal-categories" class="modal-overlay hidden">
+      <div class="modal-card modal-sm categories-card">
+        <div class="modal-header">
+          <div class="categories-header-title">
+            <div class="categories-header-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18" />
+              </svg>
+            </div>
+            <h3 data-i18n="modal.categories.title">Kelola Kategori</h3>
+          </div>
+          <button class="modal-close" data-close="modal-categories">&times;</button>
+        </div>
+        <div class="modal-body categories-modal-body">
+          <form id="form-add-category" class="category-add-row">
+            <input type="text" id="input-new-category" placeholder="Nama kategori baru..." maxlength="20" data-i18n-placeholder="modal.categories.ph" autocomplete="off" required />
+            <button type="submit" id="btn-submit-category" class="btn btn-primary btn-sm btn-category-add" title="Tambah kategori baru" data-i18n-title="modal.categories.btn_add">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+              <span data-i18n="modal.categories.btn_add">Tambah</span>
+            </button>
+          </form>
+
+          <div class="categories-section-head">
+            <span class="categories-section-label" data-i18n="modal.categories.list_title">Daftar Kategori</span>
+            <span id="categories-count-badge" class="categories-counter-pill">0</span>
+          </div>
+
+          <ul id="categories-manage-list" class="categories-manage-list"></ul>
+        </div>
+        <div class="modal-footer categories-modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm btn-modal-done" data-close="modal-categories" data-i18n="modal.categories.btn_close">Selesai</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: ABOUT UNXNOW -->
+    <div id="modal-about" class="modal-overlay hidden">
+      <div class="modal-card modal-sm about-card">
+        <div class="modal-header">
+          <div class="about-header-brand">
+            <div class="brand-logo-badge">
+              <img src="icons/logo.png" class="brand-logo-img" alt="UNXNOW Logo" />
+            </div>
+            <div class="about-title-block">
+              <h3 data-i18n="modal.about.title">UNXNOW Cookie Manager</h3>
+              <span class="about-version">v1.2.0</span>
+            </div>
+          </div>
+          <button class="modal-close" data-close="modal-about">&times;</button>
+        </div>
+        <div class="modal-body about-body">
+          <p id="about-modal-desc" class="about-desc" data-i18n="modal.about.desc">Ekstensi manajemen cookie browser modern dengan direktori website bertingkat, pengelompokan kategori, pencadangan profil, dan editor cookie yang aman.</p>
+          
+          <div class="about-info-list">
+            <div class="about-info-item">
+              <span id="about-label-dev" class="about-info-label" data-i18n="modal.about.label_dev">Pengembang</span>
+              <span class="about-info-val">@Unxnow0712</span>
+            </div>
+            <div class="about-info-item">
+              <span id="about-label-license" class="about-info-label" data-i18n="modal.about.label_license">Lisensi</span>
+              <span class="about-info-val">MIT / Personal Utility</span>
+            </div>
+            <div class="about-info-item">
+              <span id="about-label-storage" class="about-info-label" data-i18n="modal.about.label_storage">Penyimpanan</span>
+              <span class="about-info-val">Chrome Local Storage</span>
+            </div>
+          </div>
+
+          <div class="about-credit-box">
+            Developed with ❤️ by <strong>@Unxnow0712</strong>
+          </div>
+
+          <div class="modal-footer" style="margin-top: 8px;">
+            <button type="button" id="btn-about-close" class="btn btn-primary btn-sm" data-close="modal-about" data-i18n="modal.about.btn_close" style="width: 100%;">Tutup</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="toast hidden">
+      <span id="toast-message">Notification</span>
+    </div>
+  </div>
+
+  <script type="module" src="popup.js"></script>
+</body>
+
+</html>

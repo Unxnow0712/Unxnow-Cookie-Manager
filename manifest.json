@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "Unxnow Cookie Manager",
+  "version": "1.2.0",
+  "description": "Modern, lightweight, and secure Cookie Manager to inspect, edit, backup, and organize cookies by website profiles and custom categories.",
+  "action": {
+    "default_title": "Unxnow Cookie Manager",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/logo-16.png",
+      "32": "icons/logo-32.png",
+      "48": "icons/logo-48.png",
+      "128": "icons/logo-128.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "permissions": [
+    "cookies",
+    "tabs",
+    "storage"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "icons": {
+    "16": "icons/logo-16.png",
+    "32": "icons/logo-32.png",
+    "48": "icons/logo-48.png",
+    "128": "icons/logo-128.png"
+  }
+}
