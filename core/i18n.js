@@ -174,6 +174,8 @@ export const I18N = {
 
     // Modal: Save Profile
     'modal.save_profile.title': 'Simpan Profil Cookie',
+    'modal.char_limit_30': 'Maks. 30 karakter',
+    'modal.char_limit_50': 'Maks. 50 karakter',
     'modal.save_profile.name': 'Nama Profil',
     'modal.save_profile.name.ph': 'contoh: Netflix - Akun Pribadi',
     'modal.save_profile.domain': 'Domain Website Target',
@@ -486,6 +488,8 @@ export const I18N = {
 
     // Modal: Save Profile
     'modal.save_profile.title': 'Save Cookie Profile',
+    'modal.char_limit_30': 'Max 30 chars',
+    'modal.char_limit_50': 'Max 50 chars',
     'modal.save_profile.name': 'Profile Name',
     'modal.save_profile.name.ph': 'e.g. Netflix - Personal Account',
     'modal.save_profile.domain': 'Target Website Domain',

@@ -484,8 +484,11 @@
           <input type="hidden" id="profile-edit-id" value="" />
 
           <div class="field-group full">
-            <label for="profile-name-input"><span data-i18n="modal.save_profile.name">Nama Profil</span> <span class="req">*</span></label>
-            <input type="text" id="profile-name-input" required placeholder="contoh: Netflix - Akun Pribadi" data-i18n-placeholder="modal.save_profile.name.ph" />
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+              <label for="profile-name-input"><span data-i18n="modal.save_profile.name">Nama Profil</span> <span class="req">*</span></label>
+              <span class="char-limit-hint" style="font-size:10.5px; color:var(--text-dim);" data-i18n="modal.char_limit_50">Maks. 50 karakter</span>
+            </div>
+            <input type="text" id="profile-name-input" required maxlength="50" placeholder="contoh: Netflix - Akun Pribadi" data-i18n-placeholder="modal.save_profile.name.ph" />
           </div>
 
           <div class="field-group full">
@@ -559,8 +562,11 @@
         <form id="form-edit-website" class="modal-body">
           <input type="hidden" id="edit-website-domain" />
           <div class="field-group full">
-            <label for="edit-website-name" data-i18n="modal.edit_website.label">Nama Tampilan Website</label>
-            <input type="text" id="edit-website-name" placeholder="contoh: Netflix Utama, Work ChatGPT..." data-i18n-placeholder="modal.edit_website.ph" required />
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+              <label for="edit-website-name" data-i18n="modal.edit_website.label">Nama Tampilan Website</label>
+              <span class="char-limit-hint" style="font-size:10.5px; color:var(--text-dim);" data-i18n="modal.char_limit_30">Maks. 30 karakter</span>
+            </div>
+            <input type="text" id="edit-website-name" placeholder="contoh: Netflix Utama, Work ChatGPT..." data-i18n-placeholder="modal.edit_website.ph" maxlength="30" required />
             <p id="edit-website-domain-hint" class="hint">Domain asli: netflix.com</p>
           </div>
           <div class="field-group full">
@@ -728,8 +734,11 @@
           <input type="hidden" id="edit-profile-domain" />
 
           <div class="field-group full">
-            <label for="edit-profile-title"><span data-i18n="modal.edit_profile.name">Nama Profil</span> <span class="req">*</span></label>
-            <input type="text" id="edit-profile-title" placeholder="contoh: Akun Utama, VIP, Akun 2..." data-i18n-placeholder="modal.edit_profile.name.ph" required />
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+              <label for="edit-profile-title"><span data-i18n="modal.edit_profile.name">Nama Profil</span> <span class="req">*</span></label>
+              <span class="char-limit-hint" style="font-size:10.5px; color:var(--text-dim);" data-i18n="modal.char_limit_50">Maks. 50 karakter</span>
+            </div>
+            <input type="text" id="edit-profile-title" placeholder="contoh: Akun Utama, VIP, Akun 2..." data-i18n-placeholder="modal.edit_profile.name.ph" maxlength="50" required />
           </div>
 
           <div class="field-group full">

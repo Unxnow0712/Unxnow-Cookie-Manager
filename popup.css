@@ -689,6 +689,9 @@ body {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   padding: 14px 18px 0 18px;
   background: var(--bg-canvas);
   position: relative;
@@ -818,12 +821,16 @@ body.dark .state-icon-badge.info {
 .websites-list {
   list-style: none;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 4px 2px 14px 2px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
   flex: 1;
   min-height: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   align-content: start;
   scrollbar-width: thin;
   scrollbar-color: rgba(0, 0, 0, 0.08) transparent;
@@ -843,7 +850,7 @@ body.dark .state-icon-badge.info {
   border: none;
   outline: none;
   border-radius: 20px;
-  padding: 16px 8px 14px;
+  padding: 13px 8px 11px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -855,6 +862,11 @@ body.dark .state-icon-badge.info {
   min-height: 122px;
   position: relative;
   box-shadow: 0 4px 18px -2px rgba(0, 0, 0, 0.06), 0 2px 6px -1px rgba(0, 0, 0, 0.04);
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .website-card:hover {
@@ -868,15 +880,15 @@ body.dark .state-icon-badge.info {
 }
 
 .website-icon-wrapper {
-  width: 50px;
-  height: 50px;
-  border-radius: 16px;
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
   background: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.05);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 9px;
+  margin-bottom: 7px;
   flex-shrink: 0;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07), 0 1px 3px rgba(0, 0, 0, 0.04);
   transition: transform 0.16s ease, box-shadow 0.16s ease;
@@ -888,38 +900,44 @@ body.dark .state-icon-badge.info {
 }
 
 .website-favicon {
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   border-radius: 6px;
   object-fit: contain;
 }
 
 .website-fallback-icon {
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .website-fallback-icon svg {
-  width: 26px;
-  height: 26px;
+  width: 24px;
+  height: 24px;
 }
 
 .website-domain {
-  font-size: 13px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  font-size: 11.5px;
   font-weight: 700;
   color: #0b0f19;
   letter-spacing: -0.2px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   width: 100%;
   max-width: 100%;
-  padding: 0 4px 2px;
-  line-height: 1.4;
+  min-width: 0;
+  padding: 0 4px;
+  line-height: 1.25;
   box-sizing: border-box;
+  text-align: center;
 }
 
 .website-subdomain {
@@ -1017,6 +1035,9 @@ body.dark .state-icon-badge.info {
   min-height: 0;
   height: 100%;
   overflow: hidden;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .profiles-bar {
@@ -2170,6 +2191,9 @@ textarea:focus {
   min-height: 0;
   height: 100%;
   overflow: hidden;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 #pane-profiles,
@@ -2177,6 +2201,9 @@ textarea:focus {
   flex: 1;
   min-height: 0;
   height: 100%;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 @keyframes fadeIn {

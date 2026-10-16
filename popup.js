@@ -2295,8 +2295,8 @@ function setupEventListeners() {
   // Save Profile form submit
   formSaveProfile.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const title = profileNameInput.value.trim();
-    const domain = profileDomainInput.value.trim();
+    const title = profileNameInput.value.trim().slice(0, 50);
+    const domain = profileDomainInput.value.trim().slice(0, 100);
     const isCurrentSource = sourceCurrentTab.checked;
     let cookiesToSave = [];
 
@@ -2399,7 +2399,7 @@ function setupEventListeners() {
     formEditWebsite.addEventListener('submit', async (e) => {
       e.preventDefault();
       const domain = editWebsiteDomain.value.trim();
-      const newName = editWebsiteName.value.trim();
+      const newName = editWebsiteName.value.trim().slice(0, 30);
       const newCategory = editWebsiteCategory ? editWebsiteCategory.value.trim() : '';
       if (!domain) return;
 
@@ -2528,7 +2528,7 @@ function setupEventListeners() {
       e.preventDefault();
       const id = editProfileId.value;
       const domain = editProfileDomain.value.trim();
-      const title = editProfileTitle.value.trim();
+      const title = editProfileTitle.value.trim().slice(0, 50);
       const cookiesRaw = editProfileCookies.value.trim();
 
       if (!title) {
